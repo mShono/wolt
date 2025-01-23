@@ -46,7 +46,7 @@ async def get_delivery_order_price(
 ):
     static_data, dynamic_data = await fetch_venue_data(venue_slug)
     try:
-        venue_cords_lon, venue_cords_lat = static_data["venue_raw"]["locationss"]["coordinates"]
+        venue_cords_lon, venue_cords_lat = static_data["venue_raw"]["location"]["coordinates"]
         delivery_specs = dynamic_data["venue_raw"]["delivery_specs"]
     except KeyError:
         raise HTTPException(
