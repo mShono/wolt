@@ -9,12 +9,17 @@ app = FastAPI()
 BASE_URL = "https://consumer-api.development.dev.woltapi.com/home-assignment-api/v1/venues/"
 
 
+def response_check(static_dynamic, venue_slug):
+    for info in static_dynamic:
+        if isinstance(info, httpx.Response) and info.status_code == 404:
+            raise HTTPException(status_code=404, detail=f"Venue '{venue_slug}' not found")
+
+
 async def fetch_venue_data(venue_slug: str):
     async with httpx.AsyncClient() as client:
         static = await client.get(f"{BASE_URL}{venue_slug}/static")
         dynamic = await client.get(f"{BASE_URL}{venue_slug}/dynamic")
-    if isinstance(static, httpx.Response) and static.status_code == 404:
-        raise HTTPException(status_code=404, detail=f"Venue '{venue_slug}' not found")
+    response_check((static, dynamic), venue_slug)
     return static.json(), dynamic.json()
 
 
