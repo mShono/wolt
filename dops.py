@@ -9,18 +9,12 @@ app = FastAPI()
 BASE_URL = "https://consumer-api.development.dev.woltapi.com/home-assignment-api/v1/venues/"
 
 
-# def response_check(static_dynamic, venue_slug):
-#     for info in static_dynamic:
-#         if isinstance(info, httpx.Response) and info.is_error:
-#             raise HTTPException(status_code=404, detail=f"Venue '{venue_slug}' not found")
-
-
 async def fetch_venue_data(venue_slug: str):
     async with httpx.AsyncClient() as client:
-        static = await client.get(f"{BASE_URL}{venue_slug}/static")
-        dynamic = await client.get(f"{BASE_URL}{venue_slug}/dynamic")
         try:
+            static = await client.get(f"{BASE_URL}{venue_slug}/static")
             static.raise_for_status()
+            dynamic = await client.get(f"{BASE_URL}{venue_slug}/dynamic")
             dynamic.raise_for_status()
         except httpx.HTTPStatusError as e:
             raise HTTPException(
@@ -38,7 +32,7 @@ def calculate_delivery_fee(base_price, distance_ranges, distance):
         if range["min"] <= distance <= range["max"]:
             delivery_fee = base_price + range["a"] + range["b"] * round(distance / 10)
             return delivery_fee
-    raise HTTPException(status_code=520, detail="The distance is too long, delivery is not possible")
+    raise HTTPException(status_code=406, detail="The distance is too long, delivery is not possible")
 
 
 @app.get(
@@ -58,7 +52,7 @@ async def get_delivery_order_price(
     except KeyError as e:
         raise HTTPException(
             status_code=503,
-            detail=f"KeyError. Key {e.args[0]} is not found"
+            detail=f"KeyError. Key '{e.args[0]}' is not found"
         )
 
     distance = calculate_distance((venue_cords_lat, venue_cords_lon), (user_lat, user_lon))
