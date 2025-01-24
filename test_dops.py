@@ -39,7 +39,7 @@ def test_long_distance():
 
     response = client.get(url, params=params)
     assert response.status_code == 406
-    assert response.json() == {"detail":"The distance is too long, delivery is not possible"}
+    assert response.json() == {"detail": "The distance is too long, delivery is not possible"}
 
 
 def test_venue_slug_missing():
@@ -51,8 +51,13 @@ def test_venue_slug_missing():
 
     response = client.get(url, params=params)
     assert response.status_code == HTTPStatus.UNPROCESSABLE_ENTITY
-    assert response.json() == {"detail":[
-        {"type":"missing","loc":["query","venue_slug"],"msg":"Field required","input":None}
+    assert response.json() == {"detail": [
+        {
+            "type": "missing",
+            "loc": ["query", "venue_slug"],
+            "msg": "Field required",
+            "input": None
+        }
     ]}
 
 
@@ -66,7 +71,7 @@ def test_venue_slug_is_not_home_api():
 
     response = client.get(url, params=params)
     assert response.status_code == HTTPStatus.NOT_FOUND
-    assert response.json() == {"detail":"Venue '10' not found"}
+    assert response.json() == {"detail": "Venue '10' not found"}
 
 
 def test_cart_value_is_not_int():
@@ -79,8 +84,13 @@ def test_cart_value_is_not_int():
 
     response = client.get(url, params=params)
     assert response.status_code == HTTPStatus.UNPROCESSABLE_ENTITY
-    assert response.json() == {"detail":[
-        {"type":"int_parsing","loc":["query","cart_value"],"msg":"Input should be a valid integer, unable to parse string as an integer","input":"bb"}
+    assert response.json() == {"detail": [
+        {
+            "type": "int_parsing",
+            "loc": ["query", "cart_value"],
+            "msg": "Input should be a valid integer, unable to parse string as an integer",
+            "input": "bb"
+         }
     ]}
 
 
@@ -94,8 +104,14 @@ def test_cart_value_is_neg_int():
 
     response = client.get(url, params=params)
     assert response.status_code == HTTPStatus.UNPROCESSABLE_ENTITY
-    assert response.json() == {"detail":[
-        {"type":"greater_than_equal","loc":["query","cart_value"],"msg":"Input should be greater than or equal to 0","input":"-35","ctx":{"ge":0}}
+    assert response.json() == {"detail": [
+        {
+            "type": "greater_than_equal",
+            "loc": ["query", "cart_value"],
+            "msg": "Input should be greater than or equal to 0",
+            "input": "-35",
+            "ctx": {"ge": 0}
+        }
     ]}
 
 
@@ -119,8 +135,8 @@ def test_user_cord_is_not_int():
         {
             "type": "float_parsing",
             "loc": ["query", "user_lon"],
-            "msg":"Input should be a valid number, unable to parse string as a number",
-            "input":"bb"}
+            "msg": "Input should be a valid number, unable to parse string as a number",
+            "input": "bb"}
     ]}
 
 
@@ -134,20 +150,20 @@ def test_user_cord_value_is_too_big():
 
     response = client.get(url, params=params)
     assert response.status_code == HTTPStatus.UNPROCESSABLE_ENTITY
-    assert response.json() == {"detail":[
+    assert response.json() == {"detail": [
         {
-            "type":"less_than_equal",
-            "loc":["query","user_lat"],
-            "msg":"Input should be less than or equal to 90",
-            "input":"91",
-            "ctx":{"le":90.0}
+            "type": "less_than_equal",
+            "loc": ["query", "user_lat"],
+            "msg": "Input should be less than or equal to 90",
+            "input": "91",
+            "ctx": {"le": 90.0}
         },
         {
-            "type":"less_than_equal",
-            "loc":["query","user_lon"],
-            "msg":"Input should be less than or equal to 180",
-            "input":"182",
-            "ctx":{"le":180.0}
+            "type": "less_than_equal",
+            "loc": ["query", "user_lon"],
+            "msg": "Input should be less than or equal to 180",
+            "input": "182",
+            "ctx": {"le": 180.0}
         }
     ]}
 
@@ -162,19 +178,19 @@ def test_user_cord_value_is_too_small():
 
     response = client.get(url, params=params)
     assert response.status_code == HTTPStatus.UNPROCESSABLE_ENTITY
-    assert response.json() == {"detail":[
+    assert response.json() == {"detail": [
         {
-            "type":"greater_than_equal",
-            "loc":["query","user_lat"],
-            "msg":"Input should be greater than or equal to -90",
-            "input":"-91",
-            "ctx":{"ge":-90.0}
+            "type": "greater_than_equal",
+            "loc": ["query", "user_lat"],
+            "msg": "Input should be greater than or equal to -90",
+            "input": "-91",
+            "ctx": {"ge": -90.0}
         },
         {
-            "type":"greater_than_equal",
-            "loc":["query","user_lon"],
-            "msg":"Input should be greater than or equal to -180",
-            "input":"-182",
-            "ctx":{"ge":-180.0}
+            "type": "greater_than_equal",
+            "loc": ["query", "user_lon"],
+            "msg": "Input should be greater than or equal to -180",
+            "input": "-182",
+            "ctx": {"ge": -180.0}
         }
     ]}
