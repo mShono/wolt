@@ -41,8 +41,8 @@ def calculate_delivery_fee(base_price, distance_ranges, distance):
 async def get_delivery_order_price(
     venue_slug: str = Query(...),
     cart_value: int = Query(..., ge=0),
-    user_lat: float = Query(..., ge=-90, le=90),
-    user_lon: float = Query(..., ge=-180, le=180)
+    user_lat: float = Query(..., ge=-90, le=90, description="user's latitude"),
+    user_lon: float = Query(..., ge=-180, le=180, description="user's longitude")
 ):
     static_data, dynamic_data = await fetch_venue_data(venue_slug)
     try:
