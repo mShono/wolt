@@ -71,7 +71,7 @@ def test_venue_slug_is_not_home_api():
 
     response = client.get(url, params=params)
     assert response.status_code == HTTPStatus.NOT_FOUND
-    assert response.json() == {"detail": "Venue '10' not found"}
+    assert response.json() == {"detail": '{"message":"No venue with slug of \'10\' was found"}'}
 
 
 def test_cart_value_is_not_int():
